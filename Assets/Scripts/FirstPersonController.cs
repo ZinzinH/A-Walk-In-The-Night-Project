@@ -2,39 +2,49 @@ using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
 {
-    public float moveSpeed = 5.0f;      // Movement speed
-    public float lookSpeedX = 2.0f;     // Mouse look speed (X-axis)
-    public float lookSpeedY = 2.0f;     // Mouse look speed (Y-axis)
-    public float upDownRange = 60.0f;   // Limit to look up and down
-    
-    private float rotationX = 0;         // Current vertical rotation
-    
+    public float moveSpeed = 5f, lookSpeedX = 2f, lookSpeedY = 2f, upDownRange = 60f, gravity = -9.81f;
+    public Transform groundCheck;
+    public LayerMask groundLayer;
+
+    private float rotationX = 0f;
     private Rigidbody rb;
-    
-    // Start is called before the first frame update
+    private bool isGrounded;
+    private const float groundDistance = 0.4f;
+
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;  // Locks the cursor to the center of the screen
-        Cursor.visible = false;                    // Makes the cursor invisible
-        rb = GetComponent<Rigidbody>();             // Get the Rigidbody component
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        if (!groundCheck) groundCheck = transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Handle mouse look (rotation)
-        float rotX = Input.GetAxis("Mouse X") * lookSpeedX;    // Look left and right
-        rotationX -= Input.GetAxis("Mouse Y") * lookSpeedY;     // Look up and down
-        rotationX = Mathf.Clamp(rotationX, -upDownRange, upDownRange);  // Clamp up/down view range
+        // Ground check
+        isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundLayer);
 
-        transform.Rotate(0, rotX, 0);                         // Rotate player left/right
-        Camera.main.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);  // Rotate camera up/down
+        // Mouse look
+        rotationX -= Input.GetAxis("Mouse Y") * lookSpeedY;
+        rotationX = Mathf.Clamp(rotationX, -upDownRange, upDownRange);
+        transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
+        Camera.main.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
 
-        // Handle movement (WASD or arrow keys)
-        float moveX = Input.GetAxis("Horizontal") * moveSpeed; // Left/Right (A/D or Arrow Keys)
-        float moveZ = Input.GetAxis("Vertical") * moveSpeed;   // Forward/Backward (W/S or Arrow Keys)
-        
-        Vector3 movement = transform.right * moveX + transform.forward * moveZ;
-        rb.MovePosition(rb.position + movement * Time.deltaTime);  // Move player
+        // Movement
+        Vector3 movement = (transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical")) * moveSpeed * Time.deltaTime;
+
+        // If grounded, don't apply gravity vertically
+        if (isGrounded)
+        {
+            movement.y = 0;
+        }
+        else
+        {
+            movement.y = gravity * Time.deltaTime;  // Apply gravity if not grounded
+        }
+
+        // Apply the movement to the Rigidbody
+        rb.MovePosition(rb.position + movement);
     }
 }
