@@ -17,7 +17,7 @@ public class RandomSoundPlayer : MonoBehaviour
         // Check if audioClips array has been set up
         if (audioClips.Length == 0)
         {
-            Debug.LogWarning("Audio Clips not assigned! Please assign 5 Audio Clips.");
+            Debug.LogWarning("Audio Clips not assigned! Please assign Audio Clips.");
             return;
         }
 
@@ -25,7 +25,7 @@ public class RandomSoundPlayer : MonoBehaviour
         StartCoroutine(PlayRandomSoundAtIntervals());
     }
 
-    // Coroutine to play a random sound at random intervals
+    // Coroutine to play a random sound and wait until it finishes before playing the next one
     private IEnumerator PlayRandomSoundAtIntervals()
     {
         while (true)
@@ -33,9 +33,14 @@ public class RandomSoundPlayer : MonoBehaviour
             // Play a random sound
             PlayRandomSound();
 
-            // Wait for a random interval between 10 to 30 seconds
-            float randomInterval = Random.Range(10f, 30f);
-            yield return new WaitForSeconds(randomInterval);
+            // Wait for the current sound to finish before continuing
+            while (audioSource.isPlaying)
+            {
+                yield return null; // Wait until the sound finishes
+            }
+
+            // Wait for 10 seconds before playing the next sound
+            yield return new WaitForSeconds(10f);
         }
     }
 
