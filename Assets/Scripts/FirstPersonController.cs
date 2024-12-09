@@ -5,6 +5,7 @@ public class FirstPersonController : MonoBehaviour
     public float moveSpeed = 5f, lookSpeedX = 2f, lookSpeedY = 2f, upDownRange = 60f, gravity = -9.81f;
     public Transform groundCheck;
     public LayerMask groundLayer;
+    public AudioSource walkAudioSource; // Add this line to reference the AudioSource component
 
     private float rotationX = 0f;
     private Rigidbody rb;
@@ -17,7 +18,11 @@ public class FirstPersonController : MonoBehaviour
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
         if (!groundCheck) groundCheck = transform;
+
+        // Ensure an AudioSource is assigned
+        if (!walkAudioSource) walkAudioSource = GetComponent<AudioSource>(); // Get the AudioSource component if not manually assigned
     }
 
     void Update()
@@ -46,5 +51,21 @@ public class FirstPersonController : MonoBehaviour
 
         // Apply the movement to the Rigidbody
         rb.MovePosition(rb.position + movement);
+
+        // Play or Stop the walking sound
+        if ((Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) && isGrounded)
+        {
+            if (!walkAudioSource.isPlaying) // Check if the audio is not already playing
+            {
+                walkAudioSource.Play(); // Play the walking sound
+            }
+        }
+        else
+        {
+            if (walkAudioSource.isPlaying)
+            {
+                walkAudioSource.Stop(); // Stop the sound if there's no movement
+            }
+        }
     }
 }
