@@ -165,6 +165,8 @@ PlayableDirector:
     value: {fileID: 1776374313}
   - key: {fileID: 2909082167263089055, guid: faee4887a46eb244ab8aa4c9797349e3, type: 2}
     value: {fileID: 1530346788}
+  - key: {fileID: -4311866230218878656, guid: faee4887a46eb244ab8aa4c9797349e3, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &669752107
@@ -289,8 +291,8 @@ Camera:
   m_GameObject: {fileID: 714738393}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
