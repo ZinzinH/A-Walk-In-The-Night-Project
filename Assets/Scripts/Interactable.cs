@@ -1,29 +1,26 @@
 using UnityEngine;
-using TMPro;  // TextMesh Pro namespace
-using UnityEngine.SceneManagement; // For scene management
+using TMPro;  
+using UnityEngine.SceneManagement; 
 
 public class Interactable : MonoBehaviour
 {
-    public string interactionMessage = "Press F to interact"; // Message shown when player is nearby
-    public TMP_Text interactionText;  // Reference to the TextMeshPro UI Text element for interaction
-    public string interactionResponse = "You interacted with the object";  // Message after interaction
+    public string interactionMessage = "Press F to interact";
+    public TMP_Text interactionText;  
+    public string interactionResponse = "You interacted with the object";  
 
-    public bool isKey = false; // Flag to identify if this is the key
-    public bool isDoor = false; // Flag to identify if this is the door
+    public bool isKey = false; 
+    public bool isDoor = false; 
 
-    // Reference to the player's inventory (you can expand this in the future)
-    public static bool hasKey = false; // Static variable to hold if the player has the key
+    public static bool hasKey = false; 
 
     public void Interact()
     {
-        // If this is the key, add it to the player's inventory and destroy the key object
         if (isKey)
         {
-            hasKey = true;  // Player now has the key
+            hasKey = true;  
             interactionText.text = "You picked up the key!";
-            Destroy(gameObject);  // Destroy the key object
+            Destroy(gameObject);  
         }
-        // If this is a door and the player has the key, load the next scene
         else if (isDoor && hasKey)
         {
             interactionText.text = "You unlocked the door!";
@@ -35,13 +32,12 @@ public class Interactable : MonoBehaviour
         }
         else
         {
-            interactionText.text = interactionResponse; // Default interaction response
+            interactionText.text = interactionResponse; 
         }
     }
 
     void LoadNextScene()
     {
-        // Load the next scene. You can modify the scene name or use the build index.
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // Load the next scene in build settings
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); 
     }
 }

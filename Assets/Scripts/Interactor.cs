@@ -1,21 +1,18 @@
 using UnityEngine;
-using TMPro;  // Use TextMesh Pro namespace
-
+using TMPro;  
 public class Interactor : MonoBehaviour
 {
-    public float interactionDistance = 3f; // Distance to interact with objects
-    public KeyCode interactKey = KeyCode.F; // Key for interaction
-    public TMP_Text interactionText; // Reference to the TextMeshPro UI Text element for interaction message
+    public float interactionDistance = 3f; 
+    public KeyCode interactKey = KeyCode.F;
+    public TMP_Text interactionText; 
 
     private Camera playerCamera;
-    private Interactable currentInteractable; // The currently detected interactable object
+    private Interactable currentInteractable;
 
     void Start()
     {
-        // Get the camera attached to the player (assuming there is one)
         playerCamera = GetComponentInChildren<Camera>();
 
-        // Initially hide the interaction text
         if (interactionText != null)
         {
             interactionText.enabled = false;
@@ -24,7 +21,6 @@ public class Interactor : MonoBehaviour
 
     void Update()
     {
-        // Perform a raycast to check if we're facing an interactable object
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, interactionDistance))
         {
@@ -32,7 +28,6 @@ public class Interactor : MonoBehaviour
             if (interactable != null)
             {
                 currentInteractable = interactable;
-                // Show the interaction message when near the interactable object
                 interactionText.text = interactable.interactionMessage;
 
                 if (interactionText != null && !interactionText.enabled)
@@ -40,7 +35,6 @@ public class Interactor : MonoBehaviour
                     interactionText.enabled = true;
                 }
 
-                // Check for player input to interact
                 if (Input.GetKeyDown(interactKey))
                 {
                     InteractWithObject();
@@ -61,7 +55,6 @@ public class Interactor : MonoBehaviour
     {
         if (currentInteractable != null)
         {
-            // Change the message to the post-interaction response
             currentInteractable.Interact();
         }
     }
@@ -72,6 +65,6 @@ public class Interactor : MonoBehaviour
         {
             interactionText.enabled = false;
         }
-        currentInteractable = null; // Reset the current interactable
+        currentInteractable = null; 
     }
 }

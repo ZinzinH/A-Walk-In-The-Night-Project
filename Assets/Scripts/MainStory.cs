@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainStory : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
     void OnEnable()
     {
         SceneManager.LoadScene("Map", LoadSceneMode.Single);
