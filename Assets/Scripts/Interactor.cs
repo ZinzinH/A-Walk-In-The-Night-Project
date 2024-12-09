@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;  // Use TextMesh Pro namespace
-using System.Collections;  // Add this for IEnumerator
 
 public class Interactor : MonoBehaviour
 {
@@ -64,10 +63,6 @@ public class Interactor : MonoBehaviour
         {
             // Change the message to the post-interaction response
             currentInteractable.Interact();
-
-            // Optionally, hide the message after a short delay
-            // Uncomment the next line if you'd like the text to disappear after 2 seconds
-            StartCoroutine(HideTextAfterDelay(2f));  // Use coroutine to delay the hide
         }
     }
 
@@ -78,12 +73,5 @@ public class Interactor : MonoBehaviour
             interactionText.enabled = false;
         }
         currentInteractable = null; // Reset the current interactable
-    }
-
-    // Optional: Hide the text after a delay if you want the interaction text to disappear after a short period
-    IEnumerator HideTextAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay); // Wait for the specified delay time
-        HideInteractionText(); // Hide the interaction text
     }
 }
